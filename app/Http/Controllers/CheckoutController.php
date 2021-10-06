@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-\Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+use \Stripe\Checkout\Session as CheckoutSession;
 
 class CheckoutController extends Controller
 {
     public function redirect()
     {
         $priceId = 'price_1JhJUJHcBcdIHl3NsXYetfTS';
-        $callbackUrl = route('checkout.callback') . '?session_id={CHECKOUT_SESSION_ID}';
-        $checkoutSession = \Stripe\Checkout\Session::create([
+
+        $checkoutSession = CheckoutSession::create([
             'customer_email' => Auth::user()->email,
             'payment_method_types' => ['card'],
             'mode' => 'payment',
@@ -21,8 +20,8 @@ class CheckoutController extends Controller
                 'price' => $priceId,
                 'quantity' => 1,
             ]],
-            'success_url' => $callbackUrl,
-            'cancel_url' => $callbackUrl,
+            'success_url' => route('checkout.callback') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('checkout.callback') . '?session_id={CHECKOUT_SESSION_ID}',
         ]);
 
         return redirect($checkoutSession->url);
@@ -30,7 +29,7 @@ class CheckoutController extends Controller
 
     public function callback()
     {
-        $checkoutSession = \Stripe\Checkout\Session::retrieve(request('session_id'));
+        $checkoutSession = CheckoutSession::retrieve(request('session_id'));
 
         if ($checkoutSession->payment_status === 'paid') {
             $user = Auth::user();
