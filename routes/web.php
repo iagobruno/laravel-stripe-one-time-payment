@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::post('/auth', AuthController::class)->name('auth');
+
+Route::post('/checkout', [PurchaseController::class, 'redirectToCheckout'])->name('checkout')->middleware('auth');
+
+Route::get('/checkout/callback', [PurchaseController::class, 'callback'])->name('checkout.callback')->middleware('auth');
