@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DownloadBookController;
-use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,8 +20,10 @@ Route::view('/', 'app');
 
 Route::post('/auth', AuthController::class)->name('auth');
 
-Route::post('/checkout', [PurchaseController::class, 'redirectToCheckout'])->name('checkout')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::post('/checkout', [CheckoutController::class, 'redirect'])->name('checkout');
 
-Route::get('/checkout/callback', [PurchaseController::class, 'callback'])->name('checkout.callback')->middleware('auth');
+    Route::get('/checkout/callback', [CheckoutController::class, 'callback'])->name('checkout.callback');
 
-Route::post('/download', DownloadBookController::class)->name('download')->middleware('auth');
+    Route::post('/download', DownloadBookController::class)->name('download');
+});

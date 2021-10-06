@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
-class PurchaseController extends Controller
+class CheckoutController extends Controller
 {
-    public function redirectToCheckout()
+    public function redirect()
     {
         $priceId = 'price_1JhJUJHcBcdIHl3NsXYetfTS';
         $callbackUrl = route('checkout.callback') . '?session_id={CHECKOUT_SESSION_ID}';
