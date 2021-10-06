@@ -41,7 +41,7 @@
                     @can('get-book')
                         <form action="{{ route('download') }}" method="POST" target="_blank">
                             @csrf
-                            <button type="submit" class="btn btn-primary">Download</button>
+                            <button type="submit" class="btn btn-primary">&darr; Download</button>
                         </form>
                     @elseif (!Auth::check())
                         <form action="{{ route('auth') }}" method="POST">

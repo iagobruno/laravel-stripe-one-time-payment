@@ -23,3 +23,5 @@ Route::post('/auth', AuthController::class)->name('auth');
 Route::post('/checkout', [PurchaseController::class, 'redirectToCheckout'])->name('checkout')->middleware('auth');
 
 Route::get('/checkout/callback', [PurchaseController::class, 'callback'])->name('checkout.callback')->middleware('auth');
+
+Route::post('/download', DownloadBookController::class)->name('download')->middleware('auth');
